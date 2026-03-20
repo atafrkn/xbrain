@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>X-Brain — Privacy Policy</title>
+  <style>
+    :root {
+      --bg: #070a0f; --surface: #0d1117; --border: #1e2a3a;
+      --accent: #1D9BF0; --text: #e8edf5; --muted: #5a6e85;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 15px; line-height: 1.8;
+    }
+    nav {
+      padding: 16px 24px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(7,10,15,0.95);
+      position: sticky; top: 0; z-index: 10;
+    }
+    .logo { font-weight: 800; font-size: 17px; }
+    .logo span { color: var(--accent); }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 48px 24px 80px; }
+    h1 { font-size: 28px; font-weight: 800; margin-bottom: 6px; letter-spacing: -0.5px; }
+    .meta { font-size: 12px; color: var(--muted); margin-bottom: 40px; }
+    h2 {
+      font-size: 11px; font-weight: 700; color: var(--accent);
+      margin: 36px 0 10px; text-transform: uppercase; letter-spacing: 0.8px;
+    }
+    p { color: #b0bec5; margin-bottom: 14px; }
+    ul { padding-left: 20px; color: #b0bec5; margin-bottom: 14px; }
+    ul li { margin-bottom: 6px; }
+    .highlight {
+      background: rgba(29,155,240,0.08);
+      border: 1px solid rgba(29,155,240,0.2);
+      border-radius: 10px; padding: 16px 20px;
+      margin: 24px 0; font-size: 14px; color: var(--text);
+    }
+    .highlight strong { color: var(--accent); }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .divider { height: 1px; background: var(--border); margin: 32px 0; }
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 20px 24px; text-align: center;
+      font-size: 12px; color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">X-<span>Brain</span></div>
+  <span style="color:var(--muted);font-size:13px;">· Privacy Policy</span>
+</nav>
+
+<div class="wrap">
+  <h1>Privacy Policy</h1>
+  <div class="meta">Last updated: March 2026 · X-Brain Chrome Extension v3.8</div>
+
+  <div class="highlight">
+    <strong>Summary:</strong> X-Brain does not collect, store, or share any personal data with third parties. All data remains stored locally in your own browser only.
+  </div>
+
+  <h2>1. Data We Collect</h2>
+  <p>X-Brain stores the following data exclusively in your browser's <strong>local storage</strong>. This data is never transmitted to any server:</p>
+  <ul>
+    <li>Groq API key (stored locally in your browser only)</li>
+    <li>Tone, language, and autopilot preferences</li>
+    <li>Daily comment usage counter</li>
+    <li>Comment history (last 50 comments, local only)</li>
+    <li>VIP account list</li>
+  </ul>
+
+  <h2>2. Data We Do Not Collect</h2>
+  <p>X-Brain does <strong>not</strong> collect, store, or transmit the following under any circumstances:</p>
+  <ul>
+    <li>Personal identifiers (name, email address, physical address, etc.)</li>
+    <li>X/Twitter account credentials or passwords</li>
+    <li>Financial or payment information</li>
+    <li>Location data</li>
+    <li>Web browsing history</li>
+    <li>User activity tracking or analytics data</li>
+  </ul>
+
+  <div class="divider"></div>
+
+  <h2>3. Groq API Usage</h2>
+  <p>X-Brain uses Groq's AI API to generate comments. Tweet text is sent to Groq's servers solely for comment generation purposes. In this process:</p>
+  <ul>
+    <li>Your Groq API key is stored only in your browser and never shared with the developer</li>
+    <li>Tweet content is processed temporarily and is subject to Groq's own privacy policy</li>
+    <li>The developer has no access to this API traffic at any point</li>
+  </ul>
+  <p>You can review Groq's privacy policy at <a href="https://groq.com/privacy-policy/" target="_blank">groq.com/privacy-policy</a>.</p>
+
+  <div class="divider"></div>
+
+  <h2>4. Third-Party Sharing</h2>
+  <p>Your data is never shared, sold, or rented to any third party. X-Brain does not use any analytics, advertising, or tracking services.</p>
+
+  <h2>5. Data Security</h2>
+  <p>All data is stored exclusively on your local device via Chrome's built-in <code>chrome.storage.local</code> API. The developer cannot access this data in any way.</p>
+
+  <h2>6. Children's Privacy</h2>
+  <p>X-Brain is intended for users aged 18 and older only. Use of this extension by individuals under 18 is not permitted.</p>
+
+  <h2>7. Policy Changes</h2>
+  <p>Any changes to this policy will be announced in the extension's update notes. The current policy will always be published on this page.</p>
+
+  <h2>8. Contact</h2>
+  <p>For privacy-related questions, please contact: <a href="mailto:furkan@xbrain.app">furkan@xbrain.app</a></p>
+
+</div>
+
+<footer>
+  X-Brain v3.8 · by Furkan Ata · © 2026 All rights reserved
+</footer>
+
+</body>
+</html>

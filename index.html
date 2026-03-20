@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>X-Brain Pro — Sosyal Medyanı Otopilota Al</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800;900&family=DM+Mono:wght@300;400;500&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #070a0f;
+      --surface: #0d1117;
+      --surface2: #131b26;
+      --border: #1e2a3a;
+      --accent: #1D9BF0;
+      --accent2: #0085ff;
+      --accent-glow: rgba(29,155,240,0.15);
+      --text: #e8edf5;
+      --muted: #5a6e85;
+      --subtle: #1a2535;
+      --green: #00e676;
+      --gold: #f5a623;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-size: 14px;
+      overflow-x: hidden;
+    }
+
+    /* ── GRID NOISE BACKGROUND ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(29,155,240,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(0,133,255,0.05) 0%, transparent 50%),
+        linear-gradient(rgba(29,155,240,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(29,155,240,0.03) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 48px 48px, 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrap { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0;
+      backdrop-filter: blur(20px);
+      background: rgba(7,10,15,0.85);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+      padding: 14px 0;
+    }
+    .nav-inner {
+      max-width: 860px; margin: 0 auto; padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px;
+      letter-spacing: -0.3px;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-logo-icon {
+      width: 30px; height: 30px;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .nav-logo-icon img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
+    .nav-cta {
+      padding: 8px 20px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none; border-radius: 20px;
+      color: #fff; font-family: 'Syne', sans-serif;
+      font-weight: 700; font-size: 12px;
+      cursor: pointer; letter-spacing: 0.3px;
+      transition: all 0.2s;
+      box-shadow: 0 0 20px rgba(29,155,240,0.3);
+      text-decoration: none;
+    }
+    .nav-cta:hover { opacity: 0.9; box-shadow: 0 0 32px rgba(29,155,240,0.5); transform: translateY(-1px); }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 90px 0 70px;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 5px 14px;
+      background: rgba(29,155,240,0.1);
+      border: 1px solid rgba(29,155,240,0.25);
+      border-radius: 99px;
+      font-size: 11px; color: var(--accent);
+      font-weight: 600; letter-spacing: 0.5px;
+      margin-bottom: 28px;
+      animation: fadeUp 0.6s ease both;
+    }
+    .hero-badge-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      animation: pulse 2s ease infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    .hero-title {
+      font-family: 'Outfit', 'Syne', sans-serif;
+      font-size: clamp(36px, 6vw, 58px);
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -2px;
+      margin-bottom: 20px;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+    .hero-title .accent { color: var(--accent); }
+    .hero-title .glow {
+      text-shadow: 0 0 40px rgba(29,155,240,0.4);
+    }
+
+    .hero-sub {
+      font-size: 16px; color: var(--muted);
+      line-height: 1.7; max-width: 520px; margin: 0 auto 36px;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+
+    .hero-stars {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      margin-bottom: 36px;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+    .hero-stars-icons { color: var(--gold); font-size: 16px; letter-spacing: 2px; }
+    .hero-stars-text { font-size: 12px; color: var(--muted); }
+    .hero-stars-text strong { color: var(--text); }
+
+    .hero-btns {
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      flex-wrap: wrap;
+      animation: fadeUp 0.6s 0.4s ease both;
+    }
+    .btn-primary {
+      padding: 14px 32px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none; border-radius: 12px;
+      color: #fff; font-family: 'Syne', sans-serif;
+      font-weight: 700; font-size: 14px;
+      cursor: pointer; letter-spacing: 0.3px;
+      transition: all 0.2s;
+      box-shadow: 0 0 30px rgba(29,155,240,0.25);
+      text-decoration: none; display: inline-block;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 50px rgba(29,155,240,0.4); }
+    .btn-secondary {
+      padding: 14px 28px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--muted); font-family: 'Syne', sans-serif;
+      font-weight: 600; font-size: 14px;
+      cursor: pointer; transition: all 0.2s;
+      text-decoration: none; display: inline-block;
+    }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    /* ── SECTION ── */
+    section { padding: 72px 0; }
+    .section-label {
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 2px;
+      color: var(--accent); margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Outfit', 'Syne', sans-serif;
+      font-size: clamp(24px, 4vw, 36px);
+      font-weight: 900; letter-spacing: -1px;
+      line-height: 1.1; margin-bottom: 14px;
+    }
+    .section-sub { font-size: 14px; color: var(--muted); line-height: 1.7; max-width: 500px; }
+
+    /* ── COMPARISON TABLE ── */
+    .compare-wrap { margin-top: 48px; overflow: hidden; border-radius: 16px; border: 1px solid var(--border); }
+    .compare-head {
+      display: grid; grid-template-columns: 1fr 120px 140px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .compare-head-cell {
+      padding: 16px 20px;
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 12px;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .compare-head-cell.pro-col {
+      background: rgba(29,155,240,0.08);
+      color: var(--accent);
+      border-left: 1px solid rgba(29,155,240,0.2);
+      text-align: center;
+      position: relative;
+    }
+    .compare-head-cell.pro-col::before {
+      content: '⚡ PRO';
+      display: block; font-size: 13px;
+    }
+    .compare-row {
+      display: grid; grid-template-columns: 1fr 120px 140px;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+    .compare-row:last-child { border-bottom: none; }
+    .compare-row:hover { background: rgba(255,255,255,0.02); }
+    .compare-cell {
+      padding: 14px 20px;
+      font-size: 12px; color: var(--text);
+      display: flex; align-items: center;
+    }
+    .compare-cell.center { justify-content: center; }
+    .compare-cell.pro-col {
+      background: rgba(29,155,240,0.04);
+      border-left: 1px solid rgba(29,155,240,0.12);
+      justify-content: center;
+    }
+    .compare-cell .feat-name { font-weight: 500; }
+    .compare-cell .feat-sub { font-size: 10px; color: var(--muted); display: block; margin-top: 2px; }
+    .check { color: var(--green); font-size: 16px; }
+    .cross { color: #3a4a5a; font-size: 16px; }
+    .partial { color: var(--gold); font-size: 11px; font-weight: 600; }
+
+    /* ── PRICING ── */
+    .pricing-toggle {
+      display: inline-flex; align-items: center; gap: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px; overflow: hidden;
+      margin-bottom: 40px;
+    }
+    .toggle-opt {
+      padding: 9px 22px;
+      font-family: 'Syne', sans-serif; font-weight: 600; font-size: 12px;
+      cursor: pointer; transition: all 0.2s; color: var(--muted);
+      background: none; border: none; letter-spacing: 0.3px;
+    }
+    .toggle-opt.active { background: var(--accent); color: #fff; }
+
+    .pricing-cards {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+      max-width: 600px; margin: 0 auto;
+    }
+    .pricing-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 20px; padding: 28px 24px;
+      position: relative; transition: all 0.2s;
+    }
+    .pricing-card:hover { border-color: rgba(29,155,240,0.3); transform: translateY(-2px); }
+    .pricing-card.featured {
+      border-color: var(--accent);
+      background: linear-gradient(160deg, rgba(29,155,240,0.08) 0%, var(--surface) 60%);
+      box-shadow: 0 0 40px rgba(29,155,240,0.12);
+    }
+    .pricing-card-badge {
+      position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff; font-size: 9px; font-weight: 700;
+      padding: 3px 12px; border-radius: 99px; white-space: nowrap;
+      letter-spacing: 0.5px;
+    }
+    .pricing-period {
+      font-size: 9px; color: var(--muted); font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;
+    }
+    .pricing-price {
+      font-family: 'Outfit', 'Syne', sans-serif; font-size: 40px; font-weight: 900;
+      color: var(--text); line-height: 1; margin-bottom: 4px; letter-spacing: -1px;
+    }
+    .pricing-price span { font-size: 16px; font-weight: 400; color: var(--muted); }
+    .pricing-note { font-size: 10px; color: var(--muted); margin-bottom: 4px; }
+    .pricing-save { font-size: 11px; color: var(--green); font-weight: 600; margin-bottom: 20px; min-height: 16px; }
+    .pricing-btn {
+      width: 100%; padding: 12px;
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
+      border-radius: 10px; border: none; cursor: pointer; transition: all 0.2s;
+    }
+    .pricing-btn.primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff; box-shadow: 0 0 20px rgba(29,155,240,0.2);
+    }
+    .pricing-btn.primary:hover { opacity: 0.9; box-shadow: 0 0 32px rgba(29,155,240,0.4); }
+    .pricing-btn.secondary {
+      background: var(--surface2); border: 1px solid var(--border); color: var(--muted);
+    }
+    .pricing-btn.secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── TESTIMONIALS ── */
+    .testimonials-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 14px; margin-top: 48px;
+    }
+    .testimonial-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .testimonial-card:hover { border-color: rgba(29,155,240,0.2); transform: translateY(-2px); }
+    .testimonial-stars { color: var(--gold); font-size: 12px; letter-spacing: 1px; margin-bottom: 10px; }
+    .testimonial-text {
+      font-size: 12px; color: var(--text);
+      line-height: 1.7; margin-bottom: 14px;
+    }
+    .testimonial-author {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .testimonial-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; color: #fff;
+      font-family: 'Syne', sans-serif; flex-shrink: 0;
+    }
+    .testimonial-name { font-size: 11px; font-weight: 600; color: var(--text); }
+    .testimonial-handle { font-size: 10px; color: var(--muted); }
+
+    /* ── FAQ ── */
+    .faq-list { margin-top: 48px; display: flex; flex-direction: column; gap: 8px; }
+    .faq-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .faq-item.open { border-color: rgba(29,155,240,0.3); }
+    .faq-q {
+      padding: 18px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      cursor: pointer; font-size: 13px; font-weight: 600; color: var(--text);
+      gap: 12px;
+    }
+    .faq-q:hover { color: var(--accent); }
+    .faq-arrow {
+      font-size: 16px; color: var(--muted);
+      transition: transform 0.25s; flex-shrink: 0; line-height: 1;
+    }
+    .faq-item.open .faq-arrow { transform: rotate(90deg); color: var(--accent); }
+    .faq-a {
+      font-size: 12px; color: var(--muted);
+      line-height: 1.8; padding: 0 20px;
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+    .faq-item.open .faq-a { max-height: 200px; padding: 0 20px 18px; }
+
+    /* ── CTA BANNER ── */
+    .cta-banner {
+      margin: 48px 0;
+      background: linear-gradient(135deg, rgba(29,155,240,0.12) 0%, rgba(0,133,255,0.06) 100%);
+      border: 1px solid rgba(29,155,240,0.25);
+      border-radius: 24px; padding: 48px 40px;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .cta-banner::before {
+      content: '';
+      position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(29,155,240,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-banner-title {
+      font-family: 'Outfit', 'Syne', sans-serif; font-size: 28px;
+      font-weight: 900; letter-spacing: -0.8px;
+      margin-bottom: 12px; position: relative;
+    }
+    .cta-banner-sub { font-size: 13px; color: var(--muted); margin-bottom: 28px; position: relative; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 0; text-align: center;
+      font-size: 11px; color: var(--muted);
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+
+    /* ── SCROLL ANIMATIONS ── */
+    .reveal {
+      opacity: 1; transform: none;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal-delay-1 { }
+    .reveal-delay-2 { }
+    .reveal-delay-3 { }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <div class="nav-logo-icon">
+        <img src="icon48.png" alt="X-Brain"/>
+      </div>
+      X-<span>Brain</span>
+    </div>
+    <a class="nav-cta" href="#pricing">⚡ Pro'ya Geç</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="wrap">
+  <div class="hero">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      <span id="liveUserCount">487</span> aktif kullanıcı tarafından kullanılıyor
+    </div>
+    <h1 class="hero-title">
+      Sosyal medyanı<br>
+      <span class="accent glow">otopilota al.</span>
+    </h1>
+    <p class="hero-sub">
+      X'te her tweete yapay zeka destekli, kişiselleştirilmiş yorumlar bırak. Otomatik, hızlı ve gerçek gibi görünen.
+    </p>
+    <div class="hero-stars">
+      <div class="hero-stars-icons">⭐⭐⭐⭐⭐</div>
+      <div class="hero-stars-text"><strong>4.7/5</strong> · 50+ değerlendirme</div>
+    </div>
+    <div class="hero-btns">
+      <a class="btn-primary" href="#pricing">⚡ Pro'ya Yüksel — $5.75/Ay</a>
+      <a class="btn-secondary" href="#compare">Özellikleri İncele</a>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- COMPARISON -->
+<section id="compare">
+  <div class="wrap">
+    <div class="section-label reveal">Neden Pro?</div>
+    <h2 class="section-title reveal reveal-delay-1">Free ile Pro arasındaki<br>fark gece ile gündüz.</h2>
+    <p class="section-sub reveal reveal-delay-2">Free plan başlangıç için yeterli. Büyümek istiyorsan Pro kaçınılmaz.</p>
+
+    <div class="compare-wrap reveal reveal-delay-3">
+      <div class="compare-head">
+        <div class="compare-head-cell" style="color:var(--muted);">Özellik</div>
+        <div class="compare-head-cell" style="text-align:center;color:var(--muted);">FREE</div>
+        <div class="compare-head-cell pro-col"></div>
+      </div>
+
+      <div class="compare-row">
+        <div class="compare-cell"><span><span class="feat-name">Günlük yorum hakkı</span><span class="feat-sub">Günde üretebileceğiniz yorum sayısı</span></span></div>
+        <div class="compare-cell center"><span class="partial">10/gün</span></div>
+        <div class="compare-cell pro-col"><span class="check">∞ Sınırsız</span></div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell"><span><span class="feat-name">Ton seçimi</span><span class="feat-sub">Profesyonel, Espirili, Agresif ve daha fazlası</span></span></div>
+        <div class="compare-cell center"><span class="partial">2 ton</span></div>
+        <div class="compare-cell pro-col"><span class="check">12 ton ✓</span></div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell"><span><span class="feat-name">Tam Otopilot</span><span class="feat-sub">Feed'i izle, otomatik yorum bırak</span></span></div>
+        <div class="compare-cell center"><span class="cross">✗</span></div>
+        <div class="compare-cell pro-col"><span class="check">✓</span></div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell"><span><span class="feat-name">Işık Hızında Tepki (VIP)</span><span class="feat-sub">Takip listendeki hesaplar tweet atınca ilk ol</span></span></div>
+        <div class="compare-cell center"><span class="cross">✗</span></div>
+        <div class="compare-cell pro-col"><span class="check">✓</span></div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell"><span><span class="feat-name">Duygu analizi</span><span class="feat-sub">Tweet'in tonu okunur, yorum buna göre şekillenir</span></span></div>
+        <div class="compare-cell center"><span class="cross">✗</span></div>
+        <div class="compare-cell pro-col"><span class="check">✓</span></div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell"><span><span class="feat-name">Görsel & video AI</span><span class="feat-sub">Fotoğraf ve video thumbnail'ı anlayan yorumlar</span></span></div>
+        <div class="compare-cell center"><span class="cross">✗</span></div>
+        <div class="compare-cell pro-col"><span class="check">✓</span></div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell"><span><span class="feat-name">Çok dilli destek</span><span class="feat-sub">14 dilde otomatik yorum</span></span></div>
+        <div class="compare-cell center"><span class="partial">2 dil</span></div>
+        <div class="compare-cell pro-col"><span class="check">14 dil ✓</span></div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell"><span><span class="feat-name">Spam koruması</span><span class="feat-sub">24 saatlik aktivite takibi ve risk skoru</span></span></div>
+        <div class="compare-cell center"><span class="check">✓</span></div>
+        <div class="compare-cell pro-col"><span class="check">✓</span></div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell"><span><span class="feat-name">Yorum çeşitlendirme</span><span class="feat-sub">Geçmiş yorumları analiz ederek tekrar önler</span></span></div>
+        <div class="compare-cell center"><span class="cross">✗</span></div>
+        <div class="compare-cell pro-col"><span class="check">✓</span></div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell"><span><span class="feat-name">Öncelikli destek</span><span class="feat-sub">Sorular için direkt e-posta desteği</span></span></div>
+        <div class="compare-cell center"><span class="cross">✗</span></div>
+        <div class="compare-cell pro-col"><span class="check">✓</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TESTIMONIALS -->
+<section id="reviews">
+  <div class="wrap">
+    <div class="section-label reveal">Kullanıcı yorumları</div>
+    <h2 class="section-title reveal reveal-delay-1">Gerçek kullanıcılar,<br>gerçek sonuçlar.</h2>
+
+    <div class="testimonials-grid">
+      <div class="testimonial-card reveal">
+        <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text">"Kripto hesabımda takipçi sayım 2 ayda 3 katına çıktı. Otopilot özelliği gerçekten işe yarıyor, yorumlarım insan yazmış gibi görünüyor."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">AK</div>
+          <div>
+            <div class="testimonial-name">Ahmet K.</div>
+            <div class="testimonial-handle">@ahmetkrypto · 12K takipçi</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card reveal reveal-delay-1">
+        <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text">"VIP özelliği sayesinde büyük hesaplar tweet attığında hemen oradayım. Erken yorum organik görünürlüğü inanılmaz artırıyor."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:linear-gradient(135deg,#00c853,#00e676);">SY</div>
+          <div>
+            <div class="testimonial-name">Selin Y.</div>
+            <div class="testimonial-handle">@selinyazilim · 8.4K takipçi</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card reveal reveal-delay-2">
+        <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text">"Duygu analizi özelliği harika. Olumsuz bir tweet'e otomatik empatik yorum yapıyor, pozitif olana enerjik. Çok akıllı."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:linear-gradient(135deg,#f5a623,#ff6b35);">MB</div>
+          <div>
+            <div class="testimonial-name">Mert B.</div>
+            <div class="testimonial-handle">@mertbusiness · 21K takipçi</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card reveal">
+        <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text">"Daha önce birkaç araç denedim, hepsi robotik yorumlar üretiyordu. X-Brain'in yorumları gerçekten doğal geliyor."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:linear-gradient(135deg,#9c27b0,#e040fb);">ND</div>
+          <div>
+            <div class="testimonial-name">Naz D.</div>
+            <div class="testimonial-handle">@nazdigital · 5.1K takipçi</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card reveal reveal-delay-1">
+        <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text">"Aylık 8 dolar için bu kadar değer sunan başka bir araç görmedim. ROI hesabı yapınca aslında çok ucuz."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:linear-gradient(135deg,#1D9BF0,#0085ff);">CA</div>
+          <div>
+            <div class="testimonial-name">Can A.</div>
+            <div class="testimonial-handle">@canajansi · 15K takipçi</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card reveal reveal-delay-2">
+        <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text">"Türkçe yorum kalitesi çok yüksek. Gramer hataları yok, doğal akıyor. Arkadaşlarım el ile yazdım sanıyor."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:linear-gradient(135deg,#ff4444,#ff6b6b);">EY</div>
+          <div>
+            <div class="testimonial-name">Elif Y.</div>
+            <div class="testimonial-handle">@elifyazar · 9.7K takipçi</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="wrap" style="text-align:center;">
+    <div class="section-label reveal">Fiyatlandırma</div>
+    <h2 class="section-title reveal reveal-delay-1">Sade, şeffaf fiyat.<br>Gizli ücret yok.</h2>
+    <p class="section-sub reveal reveal-delay-2" style="margin:0 auto 32px;">30 günlük iade garantisi. İstediğin zaman iptal et.</p>
+
+    <div class="pricing-toggle reveal reveal-delay-3" id="billingToggle">
+      <button class="toggle-opt" id="monthlyOpt">Aylık</button>
+      <button class="toggle-opt active" id="yearlyOpt">Yıllık · %28 İndirim</button>
+    </div>
+
+    <div class="pricing-cards reveal">
+      <!-- Free -->
+      <div class="pricing-card">
+        <div class="pricing-period">FREE</div>
+        <div class="pricing-price">$0<span>/Ay</span></div>
+        <div class="pricing-note">Kredi kartı gerekmez</div>
+        <div class="pricing-save" style="opacity:0">—</div>
+        <button class="pricing-btn secondary" id="currentPlanBtn">Mevcut Plan</button>
+        <div style="margin-top:20px;display:flex;flex-direction:column;gap:8px;text-align:left;">
+          <div style="font-size:11px;color:var(--muted);display:flex;align-items:center;gap:8px;"><span style="color:var(--green);">✓</span> 10 yorum/gün</div>
+          <div style="font-size:11px;color:var(--muted);display:flex;align-items:center;gap:8px;"><span style="color:var(--green);">✓</span> 2 ton seçeneği</div>
+          <div style="font-size:11px;color:var(--muted);display:flex;align-items:center;gap:8px;"><span style="color:var(--green);">✓</span> Türkçe & İngilizce</div>
+          <div style="font-size:11px;color:#3a4a5a;display:flex;align-items:center;gap:8px;"><span>✗</span> Otopilot</div>
+          <div style="font-size:11px;color:#3a4a5a;display:flex;align-items:center;gap:8px;"><span>✗</span> VIP Hızlı Tepki</div>
+          <div style="font-size:11px;color:#3a4a5a;display:flex;align-items:center;gap:8px;"><span>✗</span> Görsel & Duygu AI</div>
+        </div>
+      </div>
+
+      <!-- Pro -->
+      <div class="pricing-card featured">
+        <div class="pricing-card-badge" id="priceBadge">POPÜLER · %28 TASARRUF</div>
+        <div class="pricing-period" id="pricePeriod">YILLIK</div>
+        <div class="pricing-price" id="priceAmount">$5.75<span id="priceUnit">/Ay</span></div>
+        <div class="pricing-note" id="priceNote">Yıllık $69 faturalandırılır</div>
+        <div class="pricing-save" id="priceSave">Yılda $27 tasarruf</div>
+        <button class="pricing-btn primary" id="ctaBtn">⚡ Pro'ya Yüksel</button>
+        <div style="margin-top:20px;display:flex;flex-direction:column;gap:8px;text-align:left;">
+          <div style="font-size:11px;color:var(--text);display:flex;align-items:center;gap:8px;"><span style="color:var(--green);">✓</span> <strong>Sınırsız</strong> yorum</div>
+          <div style="font-size:11px;color:var(--text);display:flex;align-items:center;gap:8px;"><span style="color:var(--green);">✓</span> <strong>12 ton</strong> seçeneği</div>
+          <div style="font-size:11px;color:var(--text);display:flex;align-items:center;gap:8px;"><span style="color:var(--green);">✓</span> <strong>14 dil</strong> desteği</div>
+          <div style="font-size:11px;color:var(--text);display:flex;align-items:center;gap:8px;"><span style="color:var(--green);">✓</span> Tam Otopilot</div>
+          <div style="font-size:11px;color:var(--text);display:flex;align-items:center;gap:8px;"><span style="color:var(--green);">✓</span> VIP Hızlı Tepki</div>
+          <div style="font-size:11px;color:var(--text);display:flex;align-items:center;gap:8px;"><span style="color:var(--green);">✓</span> Görsel & Duygu AI</div>
+        </div>
+      </div>
+    </div>
+
+    <p style="font-size:11px;color:var(--muted);margin-top:20px;">
+      💳 Güvenli ödeme · 30 gün iade garantisi · İstediğin zaman iptal
+    </p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="section-label reveal">SSS</div>
+    <h2 class="section-title reveal reveal-delay-1">Sık sorulan sorular.</h2>
+
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <div class="faq-q">Groq API key neden gerekiyor? <span class="faq-arrow">›</span></div>
+        <div class="faq-a">X-Brain, yorumları üretmek için Groq'un yapay zeka modellerini kullanır. Groq ücretsiz bir API sunar — günde 14.400 istek, kredi kartı gerekmez. API key'ini console.groq.com adresinden 1 dakikada alabilirsin. Anahtarın sadece kendi tarayıcında saklanır, hiçbir sunucuya gönderilmez.</div>
+      </div>
+      <div class="faq-item reveal reveal-delay-1">
+        <div class="faq-q">X hesabım ban yer mi? <span class="faq-arrow">›</span></div>
+        <div class="faq-a">X-Brain, insan davranışı simülasyonu ile çalışır — yorumlar arasında rastgele bekleme süreleri, doğal scroll hareketleri ve Gaussian dağılımlı gecikmeler kullanır. Günlük limitler ve spam koruma mekanizmaları hesabını korur. Ancak her otomasyon aracında olduğu gibi aşırı kullanım risk taşır — önerilen limitlere uymak önemlidir.</div>
+      </div>
+      <div class="faq-item reveal reveal-delay-2">
+        <div class="faq-q">İstediğimde iptal edebilir miyim? <span class="faq-arrow">›</span></div>
+        <div class="faq-a">Evet, istediğin zaman iptal edebilirsin. Yıllık plan aldıysan ve 30 gün içinde memnun kalmazsan tam iade yapılır. İptal ettikten sonra dönem sonuna kadar Pro özelliklerini kullanmaya devam edersin.</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q">Lisans kaç cihazda çalışır? <span class="faq-arrow">›</span></div>
+        <div class="faq-a">Pro lisansın kişisel kullanım içindir ve tek bir Chrome tarayıcısında aktif olur. Birden fazla profil veya cihaz için ayrı lisans gerekir.</div>
+      </div>
+      <div class="faq-item reveal reveal-delay-1">
+        <div class="faq-q">Ödeme bilgilerim güvende mi? <span class="faq-arrow">›</span></div>
+        <div class="faq-a">Tüm ödemeler Lemon Squeezy altyapısı üzerinden işlenir — PCI DSS uyumlu, endüstri standardı güvenlik. Kredi kartı bilgilerin hiçbir zaman sistemlerimizde saklanmaz.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<div class="wrap">
+  <div class="cta-banner reveal">
+    <div class="cta-banner-title">Bugün başla, yarın farkı gör.</div>
+    <div class="cta-banner-sub">30.000+ kullanıcı zaten büyüyor. Sen ne bekliyorsun?</div>
+    <a class="btn-primary" id="finalCta" href="#pricing">⚡ Pro'ya Yüksel — $5.75/Ay</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <p style="margin-bottom:8px;">X-Brain v3.8.0 · by Furkan Ata</p>
+    <p><a href="mailto:furkan@xbrain.app">furkan@xbrain.app</a> · Tüm hakları saklıdır © 2026</p>
+  </div>
+</footer>
+
+<script src="pro.js" defer></script>
+
+</body>
+</html>
