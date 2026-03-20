@@ -40,29 +40,29 @@ var priceUnit   = document.getElementById('priceUnit');
 function setYearly() {
   yearlyOpt.classList.add('active');
   monthlyOpt.classList.remove('active');
-  priceBadge.textContent  = 'POPÜLER · %28 TASARRUF';
-  pricePeriod.textContent = 'YILLIK';
+  priceBadge.textContent  = 'POPULAR · SAVE 28%';
+  pricePeriod.textContent = 'YEARLY';
   priceAmount.childNodes[0].textContent = '$5.75';
   priceUnit.textContent   = '/Ay';
-  priceNote.textContent   = 'Yıllık $69 faturalandırılır';
-  priceSave.textContent   = 'Yılda $27 tasarruf';
+  priceNote.textContent   = 'Billed $69/year';
+  priceSave.textContent   = 'Save $27/year';
   priceSave.style.opacity = '1';
   var cta = document.getElementById('finalCta');
-  if (cta) cta.textContent = "⚡ Pro'ya Yüksel — $5.75/Ay";
+  if (cta) cta.textContent = "⚡ Upgrade to Pro — $5.75/mo";
 }
 
 function setMonthly() {
   monthlyOpt.classList.add('active');
   yearlyOpt.classList.remove('active');
-  priceBadge.textContent  = 'AYLIK PLAN';
-  pricePeriod.textContent = 'AYLIK';
+  priceBadge.textContent  = 'MONTHLY PLAN';
+  pricePeriod.textContent = 'MONTHLY';
   priceAmount.childNodes[0].textContent = '$8';
   priceUnit.textContent   = '/Ay';
-  priceNote.textContent   = 'Aylık faturalandırılır';
+  priceNote.textContent   = 'Billed monthly';
   priceSave.textContent   = '';
   priceSave.style.opacity = '0';
   var cta = document.getElementById('finalCta');
-  if (cta) cta.textContent = "⚡ Pro'ya Yüksel — $8/Ay";
+  if (cta) cta.textContent = "⚡ Upgrade to Pro — $8/mo";
 }
 
 if (yearlyOpt)  yearlyOpt.addEventListener('click', setYearly);
